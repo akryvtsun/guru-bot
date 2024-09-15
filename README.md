@@ -33,6 +33,7 @@ docker push akryvtsun/guru-bot:latest
 
 ## Useful Links
 - [Building Dynamic Telegram Bots with Kotlin](https://medium.com/@razavioo/building-dynamic-telegram-bots-with-kotlin-26b841966fbb)
+- [Dockerfile generation](https://chatgpt.com/c/66e46e18-5298-8007-821f-025a677df112)
 - [‘No Main Manifest Attribute’ Error in Java](https://ioflood.com/blog/no-main-manifest-attribute/)
 - [java.lang.NoClassDefFoundError: org/telegram/telegrambots/meta/exceptions/TelegramApiException](https://stackoverflow.com/questions/65976406/java-lang-noclassdeffounderror-org-telegram-telegrambots-meta-exceptions-telegr)
 - [How to pack into jar file all dependencies in build.gradle.kts?](https://chatgpt.com/c/66e6dbe8-2ffc-8007-b19b-096b3bf793a8)
