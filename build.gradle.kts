@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.telegram:telegrambots:6.8.0")
     testImplementation(kotlin("test"))
 }
 
