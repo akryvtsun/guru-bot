@@ -15,13 +15,13 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 val libsDir = "$buildDir/libs"
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
     jar {
         manifest {
             attributes["Main-Class"] = "echo.MainKt"
