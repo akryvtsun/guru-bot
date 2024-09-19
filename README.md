@@ -1,7 +1,7 @@
 # guru-bot
 Telegram bot for sending predefined learning materials with some periodicity
 
-## Build
+## Build [![Actions Status](https://github.com/akryvtsun/guru-bot/workflows/CI/badge.svg)](https://github.com/akryvtsun/guru-bot/actions)
 
 How to build
 ```
