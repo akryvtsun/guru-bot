@@ -13,6 +13,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.telegram:telegrambots:6.8.0")
     testImplementation(kotlin("test"))
+    testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
 val libsDir = "$buildDir/libs"
