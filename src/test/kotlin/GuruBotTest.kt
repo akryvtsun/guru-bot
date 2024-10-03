@@ -1,4 +1,4 @@
-import echo.EchoBot
+import echo.GuruBot
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -9,10 +9,10 @@ import org.telegram.telegrambots.meta.api.objects.message.Message
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import kotlin.test.Test
 
-class EchoBotTest {
+class GuruBotTest {
 
     @Test
-    fun consumeTest() {
+    fun `should consume _start command`() {
         // given
         val chatId = 12345L
         val text = "/start"
@@ -32,7 +32,7 @@ class EchoBotTest {
         every { client.execute(any<SendMessage>()) } returns null
 
         // when
-        EchoBot(client).consume(update)
+        GuruBot(client).consume(update)
 
         // than
         verify { client.execute(any<SendMessage>()) }

@@ -9,16 +9,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 val log = KotlinLogging.logger { }
 
 fun main() {
-    log.info { "Starting Guru-bot..." }
+    log.info { "Starting GuruBot..." }
 
     val token = System.getenv("BOT_TOKEN")
 
     val telegramClient = OkHttpTelegramClient(token)
-    val echoBot = EchoBot(telegramClient)
+    val guruBot = GuruBot(telegramClient)
     val botsApi = TelegramBotsLongPollingApplication()
 
     try {
-        botsApi.registerBot(token, echoBot)
+        botsApi.registerBot(token, guruBot)
     } catch (e: TelegramApiException) {
         log.error(e) { "Error on register bot" }
     }

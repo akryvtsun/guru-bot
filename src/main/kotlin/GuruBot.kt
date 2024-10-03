@@ -7,7 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.generics.TelegramClient
 
 
-class EchoBot(private val client: TelegramClient) : LongPollingSingleThreadUpdateConsumer {
+class GuruBot(
+    private val client: TelegramClient
+) : LongPollingSingleThreadUpdateConsumer {
 
     companion object {
         val log = KotlinLogging.logger { }
