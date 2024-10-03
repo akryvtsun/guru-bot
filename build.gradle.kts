@@ -17,7 +17,9 @@ dependencies {
     implementation("io.github.oshai:kotlin-logging-jvm:6.0.9")
     implementation("org.telegram:telegrambots-client:$telegramSdkVersion")
     implementation("org.telegram:telegrambots-longpolling:$telegramSdkVersion")
+
     testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:1.13.12")
     testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
