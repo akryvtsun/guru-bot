@@ -10,17 +10,34 @@ class EchoUpdateProcessor {
         val log = KotlinLogging.logger { }
     }
 
+    private val users = mutableSetOf<Long>()
+
     fun onUpdateReceived(update: Update): SendMessage? {
         if (update.hasMessage() && update.message.hasText()) {
             val text = update.message.text
             val chatId = update.message.chatId
             log.debug { "Received '$text' message from $chatId" }
 
-            val sendMessage = SendMessage()
-            sendMessage.chatId = chatId.toString()
-            sendMessage.text = "You said: $text"
+            val answer = when (text) {
+                "/start" -> {
+                    users += chatId
+                    "Good day!"
+                }
+                "/stop" -> {
+                    users -= chatId
+                    "Bye!"
+                }
+                else -> {
+                    if (chatId in users) "You said: $text" else null
+                }
+            }
 
-            return sendMessage
+            return answer?.let {
+                val sendMessage = SendMessage()
+                sendMessage.chatId = chatId.toString()
+                sendMessage.text = answer
+                sendMessage
+            }
         }
         else
             return null
