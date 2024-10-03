@@ -7,6 +7,10 @@ How to build
 ```
 ./gradlew build
 ```
+or build without tests
+```
+./gradlew build -x test
+```
 
 How to create Docker image
 ```
