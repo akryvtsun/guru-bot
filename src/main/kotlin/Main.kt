@@ -1,20 +1,25 @@
 package echo
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
+import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+
 
 val log = KotlinLogging.logger { }
 
 fun main() {
     log.info { "Starting Guru-bot..." }
+
     val token = System.getenv("BOT_TOKEN")
-    val echoBot = EchoBot(token)
-    val botsApi = TelegramBotsApi(DefaultBotSession::class.java)
+
+    val telegramClient = OkHttpTelegramClient(token)
+    val echoBot = EchoBot(telegramClient)
+    val botsApi = TelegramBotsLongPollingApplication()
+
     try {
-        botsApi.registerBot(echoBot)
+        botsApi.registerBot(token, echoBot)
     } catch (e: TelegramApiException) {
-        e.printStackTrace()
+        log.error(e) { "Error on register bot" }
     }
 }

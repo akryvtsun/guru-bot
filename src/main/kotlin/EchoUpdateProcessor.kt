@@ -33,10 +33,7 @@ class EchoUpdateProcessor {
             }
 
             return answer?.let {
-                val sendMessage = SendMessage()
-                sendMessage.chatId = chatId.toString()
-                sendMessage.text = answer
-                sendMessage
+                SendMessage(chatId.toString(), answer)
             }
         }
         else

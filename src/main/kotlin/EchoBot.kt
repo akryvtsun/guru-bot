@@ -1,17 +1,17 @@
 package echo
 
-import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.telegram.telegrambots.meta.generics.TelegramClient
 
-class EchoBot(token: String) : TelegramLongPollingBot(token) {
+
+class EchoBot(private val client: TelegramClient) : LongPollingSingleThreadUpdateConsumer {
 
     private val processor = EchoUpdateProcessor()
 
-    override fun getBotUsername(): String = System.getenv("BOT_USERNAME")
-
-    override fun onUpdateReceived(update: Update) {
+    override fun consume(update: Update) {
         processor.onUpdateReceived(update)?.let {
-            execute(it)
+            client.execute(it)
         }
     }
 }

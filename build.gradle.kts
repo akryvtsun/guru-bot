@@ -9,11 +9,14 @@ repositories {
     mavenCentral()
 }
 
+val telegramSdkVersion = "7.10.0"
+
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("ch.qos.logback:logback-classic:1.5.6")
     implementation("io.github.oshai:kotlin-logging-jvm:6.0.9")
-    implementation("org.telegram:telegrambots:6.8.0")
+    implementation("org.telegram:telegrambots-client:$telegramSdkVersion")
+    implementation("org.telegram:telegrambots-longpolling:$telegramSdkVersion")
     testImplementation(kotlin("test"))
     testImplementation("org.assertj:assertj-core:3.11.1")
 }
