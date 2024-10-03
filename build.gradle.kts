@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("io.github.oshai:kotlin-logging-jvm:6.0.9")
     implementation("org.telegram:telegrambots:6.8.0")
     testImplementation(kotlin("test"))
     testImplementation("org.assertj:assertj-core:3.11.1")
