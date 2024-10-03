@@ -15,15 +15,16 @@ class GuruBotTest {
     fun `should consume _start command`() {
         // given
         val chatId = 12345L
-        val text = "/start"
+        val textStr = "/start"
 
-        val chat = object : Chat() {}.apply {
-            this.id = chatId
-        }
-        val message = Message().apply {
-            this.chat = chat
-            this.text = text
-        }
+        val chat = Chat.builder()
+            .type("private")
+            .id(chatId)
+            .build()
+        val message = Message.builder()
+            .chat(chat)
+            .text(textStr)
+            .build()
         val update = Update().apply {
             this.message = message
         }

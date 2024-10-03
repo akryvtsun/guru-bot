@@ -36,6 +36,12 @@ docker push akryvtsun/guru-bot:latest
 ```
 
 ## Useful Links
+
+### API
+- [Telegram Bots Api for Java](https://rubenlagus.github.io/TelegramBotsDocumentation/telegram-bots.html)
+- https://core.telegram.org/bots
+
+### Problems
 - [Building Dynamic Telegram Bots with Kotlin](https://medium.com/@razavioo/building-dynamic-telegram-bots-with-kotlin-26b841966fbb)
 - [Dockerfile generation](https://chatgpt.com/c/66e46e18-5298-8007-821f-025a677df112)
 - [‘No Main Manifest Attribute’ Error in Java](https://ioflood.com/blog/no-main-manifest-attribute/)

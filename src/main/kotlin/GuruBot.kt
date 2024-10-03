@@ -39,7 +39,10 @@ class GuruBot(
 
             answer?.let {
                 log.debug { "Generated '$answer' answer" }
-                val message = SendMessage(chatId.toString(), answer)
+                val message = SendMessage.builder()
+                    .chatId(chatId.toString())
+                    .text(answer)
+                    .build()
                 client.execute(message)
             }
         }
