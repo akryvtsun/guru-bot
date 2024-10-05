@@ -18,14 +18,17 @@ class UsersState : Registrar, Preparer {
     private val users = mutableMapOf<UserId, MaterialIdx>()
     private val materials = listOf("Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5")
 
+    @Synchronized
     override fun register(user: UserId) {
         users[user] = 0
     }
 
+    @Synchronized
     override fun unregister(user: UserId) {
         users -= user
     }
 
+    @Synchronized
     override fun usersSnapshot(): List<Pair<UserId, Material>> {
         val snapshot = mutableListOf<Pair<UserId, Material>>()
         users.entries.forEach {
@@ -37,6 +40,7 @@ class UsersState : Registrar, Preparer {
         return snapshot
     }
 
+    @Synchronized
     override fun isLastMaterial(user: UserId): Boolean {
         return users[user] == materials.size
     }
