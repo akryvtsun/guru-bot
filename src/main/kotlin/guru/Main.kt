@@ -6,7 +6,6 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
-
 val log = KotlinLogging.logger { }
 
 suspend fun main() {
@@ -15,7 +14,7 @@ suspend fun main() {
     val token = System.getenv("BOT_TOKEN")
 
     val client = OkHttpTelegramClient(token)
-    val state = UsersState()
+    val state = CourseState()
 
     val bot = GuruBot(state, client)
     val job = DistributionJob(state, client)
@@ -26,6 +25,7 @@ suspend fun main() {
         log.error(e) { "Error on register bot" }
     }
 
+    // TODO externalize Cron timetable
     doInfinity("/5 * * * *") {
         job.run()
     }

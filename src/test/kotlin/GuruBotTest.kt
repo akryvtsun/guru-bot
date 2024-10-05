@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.message.Message
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import kotlin.test.Test
 
+// TODO fix it
 class GuruBotTest {
 
     @Test

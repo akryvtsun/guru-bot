@@ -10,12 +10,17 @@ interface Registrar {
 }
 
 interface Preparer {
-    fun usersSnapshot(): List<Pair<UserId, Material>>
-    fun isLastMaterial(user: UserId): Boolean
+    fun snapshot(): List<Pair<UserId, Material>>
+    fun isCourseFinished(user: UserId): Boolean
 }
 
-class UsersState : Registrar, Preparer {
+/**
+ * Holds users state and progress in course
+ */
+class CourseState : Registrar, Preparer {
+    // users course progress
     private val users = mutableMapOf<UserId, MaterialIdx>()
+    // Hardcoded course materials
     private val materials = listOf(
         "\uD83C\uDF9E Матеріал 1",
         "\uD83C\uDF9E Матеріал 2",
@@ -35,11 +40,12 @@ class UsersState : Registrar, Preparer {
     }
 
     @Synchronized
-    override fun usersSnapshot(): List<Pair<UserId, Material>> {
+    override fun snapshot(): List<Pair<UserId, Material>> {
         val snapshot = mutableListOf<Pair<UserId, Material>>()
         users.entries.forEach {
-            if (!isLastMaterial(it.key)) {
-                snapshot.add(Pair(it.key, materials[it.value]))
+            if (!isCourseFinished(it.key)) {
+                snapshot.add(it.key to materials[it.value])
+                // make course progress
                 users[it.key] = it.value + 1
             }
         }
@@ -47,7 +53,5 @@ class UsersState : Registrar, Preparer {
     }
 
     @Synchronized
-    override fun isLastMaterial(user: UserId): Boolean {
-        return users[user] == materials.size
-    }
+    override fun isCourseFinished(user: UserId) = users[user] == materials.size
 }
