@@ -23,7 +23,7 @@ class MailingListJob(
             val userId = it.first
             sendMessage(userId, it.second)
             if (state.isLastMaterial(userId))
-                sendMessage(userId, "The course is over! Have a good day!")
+                sendMessage(userId, "Курс завершено! Бажаю гарного дня!")
         }
     }
 

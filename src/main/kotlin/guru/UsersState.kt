@@ -16,7 +16,7 @@ interface Preparer {
 
 class UsersState : Registrar, Preparer {
     private val users = mutableMapOf<UserId, MaterialIdx>()
-    private val materials = listOf("Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5")
+    private val materials = listOf("Матеріал 1", "Матеріал 2", "Матеріал 3", "Матеріал 4", "Матеріал 5")
 
     @Synchronized
     override fun register(user: UserId) {

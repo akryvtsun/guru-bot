@@ -24,11 +24,11 @@ class GuruBot(
             when (text) {
                 "/start" -> {
                     state.register(user)
-                    sendMessage(user, "Welcome to the Course!")
+                    sendMessage(user, "Вітаю на курсі!")
                 }
                 "/stop" -> {
                     state.unregister(user)
-                    sendMessage(user, "Good Bye!")
+                    sendMessage(user, "До побачення!")
                 }
             }
         }
