@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 val log = KotlinLogging.logger { }
 
+// TODO externalize all text messages sending to users
 suspend fun main() {
     log.info { "Starting GuruBot..." }
 

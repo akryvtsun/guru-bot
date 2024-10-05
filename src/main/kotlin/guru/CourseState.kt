@@ -20,7 +20,7 @@ interface Preparer {
 class CourseState : Registrar, Preparer {
     // users course progress
     private val users = mutableMapOf<UserId, MaterialIdx>()
-    // Hardcoded course materials
+    // TODO externalize learning materials
     private val materials = listOf(
         "\uD83C\uDF9E Матеріал 1",
         "\uD83C\uDF9E Матеріал 2",
