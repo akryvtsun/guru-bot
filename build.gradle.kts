@@ -24,7 +24,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
-val libsDir = "$buildDir/libs"
+val libsDir = "$layout.buildDirectory/libs"
 
 tasks {
     test {
