@@ -14,6 +14,7 @@ val telegramSdkVersion = "7.10.0"
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("dev.inmo:krontab:2.5.0")
     implementation("io.github.oshai:kotlin-logging-jvm:6.0.9")
     implementation("org.telegram:telegrambots-client:$telegramSdkVersion")
     implementation("org.telegram:telegrambots-longpolling:$telegramSdkVersion")
@@ -32,7 +33,7 @@ tasks {
 
     jar {
         manifest {
-            attributes["Main-Class"] = "echo.MainKt"
+            attributes["Main-Class"] = "guru.MainKt"
             attributes["Class-Path"] = configurations.runtimeClasspath.get()
                 .map { "libs/${it.name}" }
                 .joinToString(" ")

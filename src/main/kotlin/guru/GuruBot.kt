@@ -1,4 +1,4 @@
-package echo
+package guru
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.generics.TelegramClient
 
-
 class GuruBot(
+    private val state: Registrar,
     private val client: TelegramClient
 ) : LongPollingSingleThreadUpdateConsumer {
 
@@ -15,36 +15,30 @@ class GuruBot(
         val log = KotlinLogging.logger { }
     }
 
-    private val users = mutableSetOf<Long>()
-
     override fun consume(update: Update) {
         if (update.hasMessage() && update.message.hasText()) {
+            val user = update.message.chatId
             val text = update.message.text
-            val chatId = update.message.chatId
-            log.debug { "Received '$text' message from $chatId" }
+            log.debug { "Received '$text' message from $user" }
 
-            val answer = when (text) {
+            when (text) {
                 "/start" -> {
-                    users += chatId
-                    "Good day!"
+                    state.register(user)
+                    sendMessage(user, "Welcome to the Course!")
                 }
                 "/stop" -> {
-                    users -= chatId
-                    "Bye!"
+                    state.unregister(user)
+                    sendMessage(user, "Good Bye!")
                 }
-                else -> {
-                    if (chatId in users) "You said: $text" else null
-                }
-            }
-
-            answer?.let {
-                log.debug { "Generated '$answer' answer" }
-                val message = SendMessage.builder()
-                    .chatId(chatId.toString())
-                    .text(answer)
-                    .build()
-                client.execute(message)
             }
         }
+    }
+
+    private fun sendMessage(user: Long, text: String) {
+        val message = SendMessage.builder()
+            .chatId(user)
+            .text(text)
+            .build()
+        client.execute(message)
     }
 }

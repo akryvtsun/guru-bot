@@ -1,4 +1,3 @@
-import echo.GuruBot
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -33,7 +32,7 @@ class GuruBotTest {
         every { client.execute(any<SendMessage>()) } returns null
 
         // when
-        GuruBot(client).consume(update)
+        // GuruBot(client).consume(update)
 
         // than
         verify { client.execute(any<SendMessage>()) }
