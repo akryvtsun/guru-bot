@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient
 /**
  *
  */
-class MailingListJob(
+class DistributionJob(
     private val state: Preparer,
     private val client: TelegramClient
 ): Runnable {
@@ -17,7 +17,7 @@ class MailingListJob(
     }
 
     override fun run() {
-        log.debug { "Scheduled job work..." }
+        log.debug { "Distribution job execution..." }
 
         state.usersSnapshot().forEach {
             val userId = it.first

@@ -14,20 +14,19 @@ suspend fun main() {
 
     val token = System.getenv("BOT_TOKEN")
 
-    val telegramClient = OkHttpTelegramClient(token)
+    val client = OkHttpTelegramClient(token)
     val state = UsersState()
 
-    val guruBot = GuruBot(state, telegramClient)
-    val mailingListJob = MailingListJob(state, telegramClient)
+    val bot = GuruBot(state, client)
+    val job = DistributionJob(state, client)
 
-    val botsApi = TelegramBotsLongPollingApplication()
     try {
-        botsApi.registerBot(token, guruBot)
+        TelegramBotsLongPollingApplication().registerBot(token, bot)
     } catch (e: TelegramApiException) {
         log.error(e) { "Error on register bot" }
     }
 
     doInfinity("/5 * * * *") {
-        mailingListJob.run()
+        job.run()
     }
 }
