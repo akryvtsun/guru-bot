@@ -24,7 +24,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
-val libsDir = "$layout.buildDirectory/libs"
+val libsDirProvider = layout.buildDirectory.file("libs")
 
 tasks {
     test {
@@ -43,7 +43,7 @@ tasks {
 
         // Copy runtime dependencies to the libs directory inside the JAR
         doFirst {
-            val libDir = File(libsDir)
+            val libDir = libsDirProvider.get().asFile
             if (!libDir.exists()) {
                 libDir.mkdirs()
             }
