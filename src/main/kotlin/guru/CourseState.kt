@@ -1,8 +1,12 @@
 package guru
 
+import com.google.gson.Gson
+
 typealias UserId = Long
 typealias MaterialIdx = Int
 typealias Material = String
+
+data class Course(val items: List<String>)
 
 interface Registrar {
     fun register(user: UserId)
@@ -17,17 +21,18 @@ interface Preparer {
 /**
  * Holds users state and progress in course
  */
-class CourseState : Registrar, Preparer {
+class CourseState(configFile: String) : Registrar, Preparer {
+
+    private val materials: List<Material>
+
     // users course progress
     private val users = mutableMapOf<UserId, MaterialIdx>()
-    // TODO externalize learning materials
-    private val materials = listOf(
-        "\uD83C\uDF9E Матеріал 1",
-        "\uD83C\uDF9E Матеріал 2",
-        "\uD83C\uDF9E Матеріал 3",
-        "\uD83C\uDF9E Матеріал 4",
-        "\uD83C\uDF9E Матеріал 5"
-    )
+
+    init {
+        val jsonString = this.javaClass.getResource(configFile)?.readText()
+        val course = Gson().fromJson(jsonString, Course::class.java)
+        materials = course.items
+    }
 
     @Synchronized
     override fun register(user: UserId) {

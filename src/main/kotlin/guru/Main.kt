@@ -15,7 +15,7 @@ suspend fun main() {
     val token = System.getenv("BOT_TOKEN")
 
     val client = OkHttpTelegramClient(token)
-    val state = CourseState()
+    val state = CourseState("/course.json")
 
     val bot = GuruBot(state, client)
     val job = DistributionJob(state, client)

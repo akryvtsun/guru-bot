@@ -14,6 +14,7 @@ val telegramSdkVersion = "7.10.0"
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("com.google.code.gson:gson:2.11.0")
     implementation("dev.inmo:krontab:2.5.0")
     implementation("io.github.oshai:kotlin-logging-jvm:6.0.9")
     implementation("org.telegram:telegrambots-client:$telegramSdkVersion")
