@@ -35,6 +35,14 @@ Docker Hub push
 docker push akryvtsun/guru-bot:latest
 ```
 
+## Run
+
+Environment variables:
+```
+BOT_TOKEN = <Telegram API developer token>
+BOT_DEBUG = true/false
+```
+
 ## Useful Links
 
 ### API
