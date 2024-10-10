@@ -5,16 +5,17 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
-val log = KotlinLogging.logger { }
+private val log = KotlinLogging.logger { }
 
 // TODO externalize all text messages sending to users
-suspend fun main() {
+fun main() {
     log.info { "Starting GuruBot..." }
 
     val token = System.getenv("BOT_TOKEN")
 
+    val config = CourseConfig("/course.json")
     val client = OkHttpTelegramClient(token)
-    val state = CourseState("/course.json", client)
+    val state = CourseState(config, client)
 
     val bot = GuruBot(state, client)
 

@@ -25,8 +25,8 @@ class GuruBot(
 
             when (text) {
                 "/start" -> {
-                    state.register(user)
                     client.sendMessage(user, "\uD83C\uDF89 *Вітаю на курсі* \u203c")
+                    state.register(user)
                 }
                 "/stop" -> {
                     state.unregister(user)
