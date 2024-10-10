@@ -2,6 +2,7 @@ package guru
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.generics.TelegramClient
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -22,6 +23,8 @@ class CourseState(
 ) : Registrar {
 
     companion object {
+        val isDebug = System.getenv("BOT_DEBUG").toBoolean()
+
         val log = KotlinLogging.logger { }
     }
 
@@ -45,10 +48,17 @@ class CourseState(
 
     private fun getTaskDate(configTime: LocalTime): Date {
 
-        val result: LocalDateTime = LocalDateTime.now()
-            .plusHours(configTime.hour.toLong())
-            .plusMinutes(configTime.minute.toLong())
-            .plusSeconds(configTime.second.toLong())
+        val result =
+            if (isDebug) {
+                // for debug consider configTime as current time offset
+                LocalDateTime.now()
+                    .plusHours(configTime.hour.toLong())
+                    .plusMinutes(configTime.minute.toLong())
+                    .plusSeconds(configTime.second.toLong())
+            } else {
+                // for prod consider configTime as absolute time for current day
+                LocalDateTime.of(LocalDate.now(), configTime)
+            }
 
         // convert LocalDateTime to ZonedDateTime at the system's default time zone
         val zonedDateTime = result.atZone(ZoneId.systemDefault())
