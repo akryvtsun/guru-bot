@@ -1,6 +1,7 @@
 package guru
 
 import com.google.gson.*
+import java.io.File
 import java.lang.reflect.Type
 import java.time.LocalTime
 
@@ -19,7 +20,7 @@ class CourseConfig(configFile: String) {
         get() = config.items
 
     init {
-        val jsonString = this.javaClass.getResource(configFile)?.readText()
+        val jsonString = File(configFile).readText()
         val gson = GsonBuilder()
             .registerTypeAdapter(LocalTime::class.java, LocalTimeTypeAdapter())
             .create()

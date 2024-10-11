@@ -13,7 +13,7 @@ fun main() {
 
     val token = System.getenv("BOT_TOKEN")
 
-    val config = CourseConfig("/course.json")
+    val config = CourseConfig("course/config.json")
     val client = OkHttpTelegramClient(token)
     val state = CourseState(config, client)
 
