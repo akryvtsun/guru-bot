@@ -79,13 +79,17 @@ class CourseState(
 
 class MaterialTimerTask(
     val user: UserId,
-    val items: List<Course.Period.Material.Text>,
+    val items: List<Item>,
     val client: TelegramClient,
 ) : TimerTask() {
 
     override fun run() {
         for (item in items) {
-            client.sendMessage(user, item.text)
+            when (item) {
+                is TextItem -> client.sendMessage(user, item.text)
+                is ImageItem -> client.sendImage(user, item.image)
+                is VideoItem -> client.sendVideo(user, item.video)
+            }
         }
     }
 }

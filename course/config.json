@@ -9,7 +9,7 @@
               "text": "\uD83C\uDF9E Матеріал 1"
             },
             {
-              "text": "\uD83C\uDF9E Матеріал 1\\.1"
+              "image": "course/image/image_1_2.png"
             }
           ]
         }
@@ -24,7 +24,7 @@
               "text": "\uD83C\uDF9E Матеріал 2"
             },
             {
-              "text": "\uD83C\uDF9E Матеріал 2\\.1"
+              "video": "course/video/video_2_2.mp4"
             }
           ]
         }
@@ -39,7 +39,7 @@
               "text": "\uD83C\uDF9E Матеріал 3\\.1"
             },
             {
-              "text": "\uD83C\uDF9E Матеріал 3\\.2"
+              "image": "course/image/image_3_2.png"
             }
           ]
         }
@@ -54,7 +54,7 @@
               "text": "\uD83C\uDF9E Матеріал 4"
             },
             {
-              "text": "\uD83C\uDF9E Матеріал 4\\.1"
+              "text": "\uD83C\uDF9E Матеріал 4\\.2"
             }
           ]
         }
@@ -69,7 +69,7 @@
               "text": "\uD83C\uDF9E Матеріал 5"
             },
             {
-              "text": "\uD83C\uDF9E Матеріал 5\\.1"
+              "image": "course/image/image_5_2.png"
             },
             {
               "text": "\u2705 *Курс завершено\\!*\nБажаю гарного дня\\! \uD83D\uDE09"
