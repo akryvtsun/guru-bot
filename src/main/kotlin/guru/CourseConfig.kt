@@ -5,19 +5,26 @@ import java.io.File
 import java.lang.reflect.Type
 import java.time.LocalTime
 
-data class Course(val items: List<Item>) {
-    data class Item(
-        val time: LocalTime,
-        val text: String
-    )
+data class Course(val periods: List<Period>) {
+
+    data class Period(val materials: List<Material>) {
+
+        data class Material(
+            val time: LocalTime,
+            val items: List<Text>
+        ) {
+            data class Text(val text: String)
+        }
+
+    }
 }
 
 class CourseConfig(configFile: String) {
 
     private val config: Course
 
-    val course: List<Course.Item>
-        get() = config.items
+    val course: List<Course.Period>
+        get() = config.periods
 
     init {
         val jsonString = File(configFile).readText()

@@ -2,7 +2,6 @@ package guru
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.generics.TelegramClient
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -31,37 +30,38 @@ class CourseState(
     private val timer = Timer()
 
     // users course items for sending
-    private val users = mutableMapOf<UserId, MutableList<CourseTimerTask>>()
+    private val users = mutableMapOf<UserId, MutableList<MaterialTimerTask>>()
 
     @Synchronized
     override fun register(user: UserId) {
-        val tasks = mutableListOf<CourseTimerTask>()
+        val tasks = mutableListOf<MaterialTimerTask>()
 
-        for (item in config.course) {
-            val task = CourseTimerTask(user, item.text,item == config.course.last(), client)
-            tasks.add(task)
-            timer.schedule(task, getTaskDate(item.time))
+        var now = LocalDateTime.now()
+        // periods == days for PROD and minutes for DEBUG
+        for (period in config.course) {
+            now = if (isDebug) now.plusMinutes(1) else now.plusDays(1)
+            // material is a list of items need to be posted in the same time
+            for (material in period.materials) {
+                val task = MaterialTimerTask(user, material.items, client)
+                tasks.add(task)
+                timer.schedule(task, getTaskDate(now, material.time))
+            }
         }
 
         users[user] = tasks
     }
 
-    private fun getTaskDate(configTime: LocalTime): Date {
-
-        val result =
-            if (isDebug) {
-                // for debug consider configTime as current time offset
-                LocalDateTime.now()
-                    .plusHours(configTime.hour.toLong())
-                    .plusMinutes(configTime.minute.toLong())
-                    .plusSeconds(configTime.second.toLong())
-            } else {
-                // for prod consider configTime as absolute time for current day
-                LocalDateTime.of(LocalDate.now(), configTime)
-            }
-
+    private fun getTaskDate(period: LocalDateTime, material: LocalTime): Date {
+        val timestamp = if (isDebug)
+            period
+                .withSecond(material.second)
+        else
+            period
+                .withHour(material.hour)
+                .withMinute(material.minute)
+                .withSecond(material.second)
         // convert LocalDateTime to ZonedDateTime at the system's default time zone
-        val zonedDateTime = result.atZone(ZoneId.systemDefault())
+        val zonedDateTime = timestamp.atZone(ZoneId.systemDefault())
         val instant = zonedDateTime.toInstant()
         return Date.from(instant)
     }
@@ -77,17 +77,15 @@ class CourseState(
     }
 }
 
-class CourseTimerTask(
+class MaterialTimerTask(
     val user: UserId,
-    val text: String,
-    val isLastItem: Boolean,
+    val items: List<Course.Period.Material.Text>,
     val client: TelegramClient,
 ) : TimerTask() {
 
     override fun run() {
-        client.sendMessage(user, text)
-        if (isLastItem) {
-            client.sendMessage(user, "\u2705 *Курс завершено\\!*\nБажаю гарного дня\\! \uD83D\uDE09")
+        for (item in items) {
+            client.sendMessage(user, item.text)
         }
     }
 }
