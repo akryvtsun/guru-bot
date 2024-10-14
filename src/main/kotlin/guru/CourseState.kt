@@ -1,6 +1,7 @@
 package guru
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -17,7 +18,7 @@ interface Registrar {
 /**
  * Holds users tasks state
  */
-class CourseState(
+internal class CourseState(
     private val config: CourseConfig, private val client: TelegramClient
 ) : Registrar {
 
@@ -42,7 +43,7 @@ class CourseState(
             now = if (isDebug) now.plusMinutes(1) else now.plusDays(1)
             // material is a list of items need to be posted in the same time
             for (material in period.materials) {
-                val task = MaterialTimerTask(user, material.items, client)
+                val task = MaterialTimerTask(user, material.items, client) { unregister(it) }
                 tasks.add(task)
                 timer.schedule(task, getTaskDate(now, material.time))
             }
@@ -77,13 +78,25 @@ class CourseState(
     }
 }
 
-class MaterialTimerTask(
+private class MaterialTimerTask(
     val user: UserId,
     val items: List<Item>,
     val client: TelegramClient,
+    val action: (UserId) -> Unit
 ) : TimerTask() {
 
     override fun run() {
+        try {
+            processItems()
+        // process user bot blocking
+        } catch (e: TelegramApiRequestException) {
+            if (e.errorCode == 403) {
+                action(user)
+            }
+        }
+    }
+
+    private fun processItems() {
         for (item in items) {
             when (item) {
                 is TextItem -> client.sendMessage(user, item.text)

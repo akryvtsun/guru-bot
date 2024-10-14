@@ -20,6 +20,9 @@ fun TelegramClient.sendMessage(user: UserId, text: String) {
     execute(message)
 }
 
+/**
+ * Send image file to user
+ */
 fun TelegramClient.sendImage(user: UserId, url: String) {
     val message = SendPhoto.builder()
         .chatId(user)
@@ -28,6 +31,9 @@ fun TelegramClient.sendImage(user: UserId, url: String) {
     execute(message)
 }
 
+/**
+ * Send video file to user
+ */
 fun TelegramClient.sendVideo(user: UserId, url: String) {
     val message = SendVideo.builder()
         .chatId(user)
