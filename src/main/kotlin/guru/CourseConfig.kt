@@ -32,14 +32,14 @@ class CourseConfig(configFile: String) {
     init {
         val jsonString = File(configFile).readText()
         val gson = GsonBuilder()
-            .registerTypeAdapter(LocalTime::class.java, LocalTimeTypeAdapter())
-            .registerTypeAdapter(Item::class.java, itemDeserializer)
+            .registerTypeAdapter(LocalTime::class.java, LocalTimeDeserializer())
+            .registerTypeAdapter(Item::class.java, ItemDeserializer())
             .create()
         config = gson.fromJson(jsonString, Course::class.java)
     }
 }
 
-private class LocalTimeTypeAdapter : JsonDeserializer<LocalTime> {
+private class LocalTimeDeserializer : JsonDeserializer<LocalTime> {
 
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): LocalTime {
@@ -47,13 +47,19 @@ private class LocalTimeTypeAdapter : JsonDeserializer<LocalTime> {
     }
 }
 
-val itemDeserializer = JsonDeserializer { json, _, _ ->
-    val jsonObject = json.asJsonObject
+private class ItemDeserializer : JsonDeserializer<Item> {
 
-    when {
-        jsonObject.has("text") -> Gson().fromJson(jsonObject, TextItem::class.java)
-        jsonObject.has("image") -> Gson().fromJson(jsonObject, ImageItem::class.java)
-        jsonObject.has("video") -> Gson().fromJson(jsonObject, VideoItem::class.java)
-        else -> throw IllegalArgumentException("Unknown item type")
+    private val gson =  Gson()
+
+    @Throws(JsonParseException::class)
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Item {
+        val jsonObject = json.asJsonObject
+        val clazz = when {
+            jsonObject.has("text") -> TextItem::class.java
+            jsonObject.has("image") -> ImageItem::class.java
+            jsonObject.has("video") -> VideoItem::class.java
+            else -> throw IllegalArgumentException("Unknown item type")
+        }
+        return gson.fromJson(jsonObject, clazz)
     }
 }
