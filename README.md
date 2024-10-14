@@ -46,6 +46,7 @@ BOT_DEBUG = true/false
 ## Useful Links
 
 ### API
+- [Telegram Bot Features](https://core.telegram.org/bots/features)
 - [Telegram Bots Api for Java](https://rubenlagus.github.io/TelegramBotsDocumentation/telegram-bots.html)
 - https://core.telegram.org/bots
 
