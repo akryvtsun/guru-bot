@@ -88,8 +88,8 @@ private class MaterialTimerTask(
     override fun run() {
         try {
             processItems()
-        // process user bot blocking
         } catch (e: TelegramApiRequestException) {
+            // process bot blocking by user
             if (e.errorCode == 403) {
                 action(user)
             }
@@ -99,6 +99,7 @@ private class MaterialTimerTask(
     private fun processItems() {
         for (item in items) {
             when (item) {
+                // TODO move this logic into Item classes
                 is TextItem -> client.sendMessage(user, item.text)
                 is ImageItem -> client.sendImage(user, item.image)
                 is VideoItem -> client.sendVideo(user, item.video)
