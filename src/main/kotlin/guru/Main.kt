@@ -5,6 +5,7 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
+private val storage = "course/state_dump.json"
 private val log = KotlinLogging.logger { }
 
 // TODO externalize all text messages sending to users
@@ -16,6 +17,12 @@ fun main() {
     val config = CourseConfig("course/config.json")
     val client = OkHttpTelegramClient(token)
     val state = CourseState(config, client)
+
+    state.load(storage)
+    Runtime.getRuntime().addShutdownHook(Thread {
+        state.save(storage)
+        // TODO cancel timer
+    })
 
     val bot = GuruBot(state, client)
 
