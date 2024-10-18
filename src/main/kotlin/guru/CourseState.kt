@@ -45,6 +45,7 @@ internal class CourseState(
 
     @Synchronized
     override fun register(user: UserId) {
+        log.info { "Register user $user" }
         registerImpl(user, LocalDateTime.now(), emptyList())
     }
 
@@ -88,6 +89,7 @@ internal class CourseState(
 
     @Synchronized
     override fun unregister(user: UserId) {
+        log.info { "Unregister user $user" }
         // if user unsubscribed then cancel all his not executed tasks
         users[user]?.tasks?.forEach { it.cancel() }
         users -= user
@@ -98,6 +100,7 @@ internal class CourseState(
 
     @Synchronized
     fun load(storage: String) {
+        log.info { "Loading state..." }
         val file = File(storage)
         if (file.exists()) {
             val stateStr = file.bufferedReader().readText()
@@ -112,6 +115,7 @@ internal class CourseState(
 
     @Synchronized
     fun save(storage: String) {
+        log.info { "Saving state..." }
         val state = mutableMapOf<UserId, CourseInfo<Boolean>>()
         for (user in users) {
             val tasksState = mutableListOf<Boolean>()
