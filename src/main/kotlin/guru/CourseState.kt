@@ -102,7 +102,7 @@ internal class CourseState(
         if (file.exists()) {
             val stateStr = file.bufferedReader().readText()
             val type = object : TypeToken<HashMap<UserId, CourseInfo<Boolean>>>() {}.type
-            val state: MutableMap<UserId, CourseInfo<Boolean>> = gson.fromJson(stateStr, type)
+            val state: Map<UserId, CourseInfo<Boolean>> = gson.fromJson(stateStr, type)
             for (user in state) {
                 registerImpl(user.key, user.value.start, user.value.tasks)
             }
@@ -114,12 +114,12 @@ internal class CourseState(
     fun save(storage: String) {
         val state = mutableMapOf<UserId, CourseInfo<Boolean>>()
         for (user in users) {
-            val userState = mutableListOf<Boolean>()
+            val tasksState = mutableListOf<Boolean>()
             for (task in user.value.tasks) {
-                userState.add(task.cancel())
+                tasksState.add(task.cancel())
             }
             // TODO store the first not cancelled task index
-            state[user.key] = CourseInfo(user.value.start, userState)
+            state[user.key] = CourseInfo(user.value.start, tasksState)
         }
         val stateStr = gson.toJson(state)
         File(storage).bufferedWriter().use { it.write(stateStr) }
@@ -137,7 +137,7 @@ private class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>, JsonDeserial
     }
 }
 
-private data class CourseInfo<T>(val start: LocalDateTime, val tasks: MutableList<T>)
+private data class CourseInfo<T>(val start: LocalDateTime, val tasks: List<T>)
 
 private class MaterialTimerTask(
     val user: UserId,
