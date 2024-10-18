@@ -1,18 +1,16 @@
 package guru
 
-import com.google.gson.*
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.io.File
-import java.lang.reflect.Type
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 typealias UserId = Long
 
@@ -127,17 +125,6 @@ internal class CourseState(
         }
         val stateStr = gson.toJson(state)
         File(storage).bufferedWriter().use { it.write(stateStr) }
-    }
-}
-
-private class LocalDateTimeAdapter : JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
-
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): LocalDateTime {
-        return LocalDateTime.parse(json.asString)
-    }
-
-    override fun serialize(src: LocalDateTime, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return context.serialize(src.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 }
 
