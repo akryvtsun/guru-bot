@@ -35,7 +35,19 @@ Docker Hub push
 docker push akryvtsun/guru-bot:latest
 ```
 
-## Configuration
+## Config
+```bash
+.
+|____course
+| |____video
+| | |____video_1.mp4
+| | |____video_2.mp4
+| |____image
+| | |____image_1.png
+| | |____image_2.png
+| | |____image_3.png
+| |____config.json
+```
 
 ## Run
 
