@@ -51,14 +51,14 @@ internal class CourseState(
         val tasks = mutableListOf<MaterialTimerTask>()
 
         var now = courseStart
-        var i = 0
+        val iter = tasksState.iterator()
         // periods == days for PROD and minutes for DEBUG
         for (period in config.course) {
             now = if (isDebug) now.plusMinutes(1) else now.plusDays(1)
             // material is a list of items need to be posted in the same time
             for (material in period.materials) {
-                if (i < tasksState.size) {
-                    val isActive = tasksState[i++]
+                if (iter.hasNext()) {
+                    val isActive = iter.hasNext()
                     if (!isActive) continue
                 }
                 val task = MaterialTimerTask(user, material.items, client) { unregister(it) }
