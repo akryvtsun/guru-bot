@@ -22,7 +22,7 @@ interface Registrar {
 /**
  * Holds users tasks state
  */
-internal class CourseState(
+internal class BotState(
     private val config: CourseConfig, private val client: TelegramClient
 ) : Registrar {
 
@@ -39,35 +39,36 @@ internal class CourseState(
     private val timer = Timer()
 
     // users course items for sending
-    private val users = mutableMapOf<UserId, CourseInfo<MaterialTimerTask>>()
+    private val users = mutableMapOf<UserId, CourseState<List<MaterialTimerTask>>>()
 
     @Synchronized
     override fun register(user: UserId) {
         log.info { "Register user $user" }
-        registerImpl(user, LocalDateTime.now(), emptyList())
+        registerImpl(user, LocalDateTime.now(), 0)
     }
 
-    private fun registerImpl(user: UserId, courseStart: LocalDateTime, tasksState: List<Boolean>) {
+    private fun registerImpl(user: UserId, courseStart: LocalDateTime, firstActiveTask: Int) {
         val tasks = mutableListOf<MaterialTimerTask>()
 
         var now = courseStart
-        val iter = tasksState.iterator()
+        var index = 0
         // periods == days for PROD and minutes for DEBUG
         for (period in config.course) {
             now = if (isDebug) now.plusMinutes(1) else now.plusDays(1)
             // material is a list of items need to be posted in the same time
             for (material in period.materials) {
-                if (iter.hasNext()) {
-                    val isActive = iter.hasNext()
-                    if (!isActive) continue
-                }
                 val task = MaterialTimerTask(user, material.items, client) { unregister(it) }
+                if (firstActiveTask == -1 || index++ < firstActiveTask) {
+                    task.cancel()
+                }
+                else {
+                    timer.schedule(task, getTaskDate(now, material.time))
+                }
                 tasks.add(task)
-                timer.schedule(task, getTaskDate(now, material.time))
             }
         }
 
-        users[user] = CourseInfo(courseStart, tasks)
+        users[user] = CourseState(courseStart, tasks)
     }
 
     private fun getTaskDate(period: LocalDateTime, material: LocalTime): Date {
@@ -102,8 +103,8 @@ internal class CourseState(
         val file = File(storage)
         if (file.exists()) {
             val stateStr = file.bufferedReader().readText()
-            val type = object : TypeToken<HashMap<UserId, CourseInfo<Boolean>>>() {}.type
-            val state: Map<UserId, CourseInfo<Boolean>> = gson.fromJson(stateStr, type)
+            val type = object : TypeToken<HashMap<UserId, CourseState<Int>>>() {}.type
+            val state: Map<UserId, CourseState<Int>> = gson.fromJson(stateStr, type)
             for (user in state) {
                 registerImpl(user.key, user.value.start, user.value.tasks)
             }
@@ -114,21 +115,17 @@ internal class CourseState(
     @Synchronized
     fun save(storage: String) {
         log.info { "Saving state..." }
-        val state = mutableMapOf<UserId, CourseInfo<Boolean>>()
+        val state = mutableMapOf<UserId, CourseState<Int>>()
         for (user in users) {
-            val tasksState = mutableListOf<Boolean>()
-            for (task in user.value.tasks) {
-                tasksState.add(task.cancel())
-            }
-            // TODO store the first not cancelled task index
-            state[user.key] = CourseInfo(user.value.start, tasksState)
+            val index = user.value.tasks.indexOfFirst { it.cancel() }
+            state[user.key] = CourseState(user.value.start, index)
         }
         val stateStr = gson.toJson(state)
         File(storage).bufferedWriter().use { it.write(stateStr) }
     }
 }
 
-private data class CourseInfo<T>(val start: LocalDateTime, val tasks: List<T>)
+private data class CourseState<T>(val start: LocalDateTime, val tasks: T)
 
 private class MaterialTimerTask(
     val user: UserId,

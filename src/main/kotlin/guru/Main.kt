@@ -16,7 +16,7 @@ fun main() {
 
     val config = CourseConfig("course/config.json")
     val client = OkHttpTelegramClient(token)
-    val state = CourseState(config, client)
+    val state = BotState(config, client)
 
     state.load(STORAGE)
     Runtime.getRuntime().addShutdownHook(Thread {
