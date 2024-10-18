@@ -7,6 +7,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.io.File
+import java.net.HttpURLConnection
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -131,7 +132,7 @@ private class MaterialTimerTask(
     val user: UserId,
     val items: List<Item>,
     val client: TelegramClient,
-    val action: (UserId) -> Unit
+    val blockAction: (UserId) -> Unit
 ) : TimerTask() {
 
     override fun run() {
@@ -139,8 +140,8 @@ private class MaterialTimerTask(
             processItems()
         } catch (e: TelegramApiRequestException) {
             // process bot blocking by user
-            if (e.errorCode == 403) {
-                action(user)
+            if (e.errorCode == HttpURLConnection.HTTP_FORBIDDEN) {
+                blockAction(user)
             }
         }
     }
