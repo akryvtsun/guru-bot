@@ -118,8 +118,8 @@ internal class BotState(
         log.info { "Saving state..." }
         val state = mutableMapOf<UserId, CourseState<Int>>()
         for (user in users) {
-            val index = user.value.tasks.indexOfFirst { it.cancel() }
-            state[user.key] = CourseState(user.value.start, index)
+            val firstActiveTask = user.value.tasks.indexOfFirst { it.cancel() }
+            state[user.key] = CourseState(user.value.start, firstActiveTask)
         }
         val stateStr = gson.toJson(state)
         File(storage).bufferedWriter().use { it.write(stateStr) }
