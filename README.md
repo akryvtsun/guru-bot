@@ -35,6 +35,8 @@ Docker Hub push
 docker push akryvtsun/guru-bot:latest
 ```
 
+## Configuration
+
 ## Run
 
 Environment variables:
