@@ -4,12 +4,6 @@ import com.google.gson.GsonBuilder
 import java.io.File
 import java.time.LocalTime
 
-sealed class Item
-
-data class TextItem(val text: String) : Item()
-data class ImageItem(val image: String) : Item()
-data class VideoItem(val video: String) : Item()
-
 data class Course(val periods: List<Period>) {
 
     data class Period(val materials: List<Material>) {

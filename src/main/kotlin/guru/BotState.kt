@@ -4,10 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.io.File
-import java.net.HttpURLConnection
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -21,7 +19,7 @@ interface Registrar {
 }
 
 /**
- * Holds users tasks state
+ * Holds users course progress
  */
 internal class BotState(
     private val config: CourseConfig, private val client: TelegramClient
@@ -33,14 +31,16 @@ internal class BotState(
         val log = KotlinLogging.logger { }
     }
 
-    private val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
-        .create()
-
-    private val timer = Timer()
+    private data class CourseState<T>(val start: LocalDateTime, val tasks: T)
 
     // users course items for sending
     private val users = mutableMapOf<UserId, CourseState<List<MaterialTimerTask>>>()
+
+    private val timer = Timer()
+
+    private val gson: Gson = GsonBuilder()
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .create()
 
     @Synchronized
     override fun register(user: UserId) {
@@ -126,34 +126,3 @@ internal class BotState(
     }
 }
 
-private data class CourseState<T>(val start: LocalDateTime, val tasks: T)
-
-private class MaterialTimerTask(
-    val user: UserId,
-    val items: List<Item>,
-    val client: TelegramClient,
-    val blockAction: (UserId) -> Unit
-) : TimerTask() {
-
-    override fun run() {
-        try {
-            processItems()
-        } catch (e: TelegramApiRequestException) {
-            // process bot blocking by user
-            if (e.errorCode == HttpURLConnection.HTTP_FORBIDDEN) {
-                blockAction(user)
-            }
-        }
-    }
-
-    private fun processItems() {
-        for (item in items) {
-            when (item) {
-                // TODO move this logic into Item classes
-                is TextItem -> client.sendMessage(user, item.text)
-                is ImageItem -> client.sendImage(user, item.image)
-                is VideoItem -> client.sendVideo(user, item.video)
-            }
-        }
-    }
-}
