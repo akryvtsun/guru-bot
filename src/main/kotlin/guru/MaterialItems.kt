@@ -1,7 +1,5 @@
 package guru
 
-import org.telegram.telegrambots.meta.api.methods.ParseMode
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.methods.send.SendVideo
 import org.telegram.telegrambots.meta.api.objects.InputFile
@@ -15,12 +13,7 @@ interface Item {
 data class TextItem(val text: String) : Item {
 
     override fun send(user: UserId, client: TelegramClient) {
-        val message = SendMessage.builder()
-            .chatId(user)
-            .parseMode(ParseMode.MARKDOWNV2)
-            .text(text)
-            .build()
-        client.execute(message)
+        client.sendMessage(user, text)
     }
 }
 
