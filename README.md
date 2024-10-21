@@ -17,9 +17,7 @@ The bot configuration consists of JSON file with the name `config.json` and poss
 
 ```json
 {
-  "periods": [ 
-    // ...     
-  ]
+  "periods": [ ]
 }
 ```
 
@@ -27,7 +25,7 @@ Here an array of periods defines a course. Each period has a structure
 
 ```json 
 {
-  "materials": [ \.\.\. ]
+  "materials": [ ]
 }
 ```
 
