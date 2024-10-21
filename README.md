@@ -3,9 +3,57 @@
 
 
 ### Description
-Telegram bot for sending predefined learning materials with some periodicity.
+Telegram bot for sending to a subscriber predefined learning information on a daily basis.
+
+All learning information is *a course*. Each course consists of daily *periods* and each period has *materials*. 
+The material has a time of publication inside a day and set of *items* for publication. Each item might be 
+a *Markdown* text, image or video.
 
 ### Configuration
+
+The bot configuration consists of JSON file with the name `config.json` and possible image(s) and video(s) files.
+
+`config.json` has structure
+
+```json
+{
+    "periods": [ ... ]
+}
+```
+
+Here an array of periods defines a course. Each period has a structure
+
+```json
+{
+  "materials": [ ... ]
+}
+```
+
+And a material looks like
+
+```json
+{
+  "time": "19:30:00",
+  "items": [ ... ]
+}
+```
+
+Individual items might be *a text*
+```json
+{ "text": "Some **Markdown** text with emoji \uD83D\uDE09" }
+```
+
+*an image*
+```json
+{ "image": "URL to image file" }
+```
+
+and *a video*
+```json
+{ "video": "URL to video file" }
+```
+
+Typical course file structure looks like
 ```bash
 .
 |____course
@@ -59,6 +107,11 @@ Environment variables:
 ```
 BOT_TOKEN = <Telegram API developer token>
 BOT_DEBUG = true/false
+```
+
+Docker container launching
+```
+docker run akryvtsun/guru-bot:latest
 ```
 
 ### Useful Links
