@@ -1,5 +1,6 @@
 # guru-bot
-[![Actions Status](https://github.com/akryvtsun/guru-bot/workflows/CI/badge.svg)](https://github.com/akryvtsun/guru-bot/actions) ![GitHub Release](https://img.shields.io/github/v/release/akryvtsun/guru-bot)
+[![Actions Status](https://github.com/akryvtsun/guru-bot/workflows/CI/badge.svg)](https://github.com/akryvtsun/guru-bot/actions)
+[![GitHub Release](https://img.shields.io/github/v/release/akryvtsun/guru-bot)](https://github.com/akryvtsun/guru-bot/releases)
 
 
 ### Description
