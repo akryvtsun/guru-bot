@@ -104,9 +104,11 @@ BOT_DEBUG = true/false
 
 Running Docker container (don't do this on Apple Silicon)
 ```bash
-docker run -d --name guru-bot-container \
+  docker run -d --name guru-bot-container \
   -e BOT_TOKEN="bot token" \
-  guru-bot     
+  -e BOT_DEBUG="true" \
+  -v <path to 'course' folder on a host computer>:/use/local/guru-bot/course \
+  guru-bot
 ```
 
 ### Useful Links
