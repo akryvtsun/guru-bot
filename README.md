@@ -70,34 +70,26 @@ Typical course file structure looks like
 ### Build 
 
 How to build
-```
+```bash
 ./gradlew build
 ```
 or build without tests
-```
+```bash
 ./gradlew build -x test
 ```
 
 How to create Docker image
-```
+```bash
 docker build --platform linux/amd64 -t guru-bot .
 ```
 
-How to run Docker container (don't do this on Apple Silicon)
-```
-docker run -d --name guru-bot-container \
-  -e BOT_USERNAME="<bot username>" \
-  -e BOT_TOKEN="bot token" \
-  guru-bot     
-```
-
 Make label
-```
+```bash
 docker tag guru-bot:latest akryvtsun/guru-bot:latest
 ```
 
 Docker Hub push
-```
+```bash
 docker push akryvtsun/guru-bot:latest
 ```
 
@@ -109,9 +101,11 @@ BOT_TOKEN = <Telegram API developer token>
 BOT_DEBUG = true/false
 ```
 
-Docker container launching
-```
-docker run akryvtsun/guru-bot:latest
+Running Docker container (don't do this on Apple Silicon)
+```bash
+docker run -d --name guru-bot-container \
+  -e BOT_TOKEN="bot token" \
+  guru-bot     
 ```
 
 ### Useful Links
