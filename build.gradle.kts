@@ -1,4 +1,5 @@
 plugins {
+    jacoco
     kotlin("jvm") version "2.0.10"
 }
 
@@ -29,6 +30,15 @@ val libsDirProvider = layout.buildDirectory.file("libs")
 tasks {
     test {
         useJUnitPlatform()
+        finalizedBy(jacocoTestReport)
+    }
+
+    jacocoTestReport {
+        dependsOn(test)
+
+        reports {
+            xml.required = true
+        }
     }
 
     jar {

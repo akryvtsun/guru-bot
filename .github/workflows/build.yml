@@ -1,4 +1,4 @@
-name: CI
+name: build
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -26,7 +26,3 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
