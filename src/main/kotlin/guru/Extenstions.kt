@@ -12,7 +12,6 @@ fun TelegramClient.sendMessage(user: UserId, text: String) {
         .chatId(user)
         .parseMode(ParseMode.MARKDOWNV2)
         .text(text)
-        .protectContent(true)
         .build()
     execute(message)
 }

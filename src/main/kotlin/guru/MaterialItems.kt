@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.io.File
 
 interface Item {
-    fun send(user: UserId, client: TelegramClient,)
+    fun send(user: UserId, client: TelegramClient)
 }
 
 data class TextItem(val text: String) : Item {
@@ -23,7 +23,6 @@ data class ImageItem(val image: String) : Item {
         val message = SendPhoto.builder()
             .chatId(user)
             .photo(InputFile(File(image)))
-            .protectContent(true)
             .build()
         client.execute(message)
     }
@@ -35,8 +34,7 @@ data class VideoItem(val video: String) : Item {
         val message = SendVideo.builder()
             .chatId(user)
             .video(InputFile(File(video)))
-            .protectContent(true)
             .build()
-        println(">>>>>>>>>>>>> Result of video sending: " + client.execute(message))
+        client.execute(message)
     }
 }
