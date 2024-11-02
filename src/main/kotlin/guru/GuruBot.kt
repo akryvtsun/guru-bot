@@ -18,6 +18,9 @@ class GuruBot(
     }
 
     override fun consume(update: Update) {
+        if (update.hasMyChatMember()) {
+            log.debug { "Received update: " + update.myChatMember.newChatMember.status }
+        }
         if (update.hasMessage() && update.message.hasText()) {
             val user = update.message.chatId
             val text = update.message.text

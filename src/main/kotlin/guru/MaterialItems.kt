@@ -23,6 +23,7 @@ data class ImageItem(val image: String) : Item {
         val message = SendPhoto.builder()
             .chatId(user)
             .photo(InputFile(File(image)))
+            .protectContent(true)
             .build()
         client.execute(message)
     }
@@ -34,7 +35,8 @@ data class VideoItem(val video: String) : Item {
         val message = SendVideo.builder()
             .chatId(user)
             .video(InputFile(File(video)))
+            .protectContent(true)
             .build()
-        client.execute(message)
+        println(">>>>>>>>>>>>> Result of video sending: " + client.execute(message))
     }
 }
