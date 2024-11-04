@@ -1,5 +1,6 @@
 package guru
 
+import guru.state.Registrar
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
 import org.telegram.telegrambots.meta.api.objects.Update

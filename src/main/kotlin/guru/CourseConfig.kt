@@ -16,7 +16,7 @@ data class Course(val periods: List<Period>) {
     }
 }
 
-internal class CourseConfig(configFile: String) {
+class CourseConfig(configFile: String) {
 
     private val config: Course
 

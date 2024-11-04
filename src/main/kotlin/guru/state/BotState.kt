@@ -1,11 +1,9 @@
-package guru
+package guru.state
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import guru.CourseConfig
+import guru.MaterialTimerTask
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.generics.TelegramClient
-import java.io.File
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -21,26 +19,24 @@ interface Registrar {
 /**
  * Holds users course progress
  */
-internal class BotState(
-    private val config: CourseConfig, private val client: TelegramClient
+class BotState(
+    private val config: CourseConfig,
+    private val client: TelegramClient,
+    private val storage: StateStorage
 ) : Registrar {
 
-    companion object {
+    private companion object {
         val isDebug = System.getenv("BOT_DEBUG").toBoolean()
 
         val log = KotlinLogging.logger { }
     }
 
-    private data class CourseState<T>(val start: LocalDateTime, val tasks: T)
+    data class CourseState<T>(val start: LocalDateTime, val tasks: T)
 
     // users course items for sending
     private val users = mutableMapOf<UserId, CourseState<List<MaterialTimerTask>>>()
 
     private val timer = Timer()
-
-    private val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
-        .create()
 
     @Synchronized
     override fun register(user: UserId) {
@@ -100,31 +96,17 @@ internal class BotState(
     }
 
     @Synchronized
-    fun load(storage: String) {
+    fun load() {
         log.info { "Loading state..." }
-        val file = File(storage)
-        if (file.exists()) {
-            val stateStr = file.bufferedReader().readText()
-            val type = object : TypeToken<HashMap<UserId, CourseState<Int>>>() {}.type
-            val state: Map<UserId, CourseState<Int>> = gson.fromJson(stateStr, type)
-            for (user in state) {
-                registerImpl(user.key, user.value.start, user.value.tasks)
-            }
-            file.delete()
+        for (user in storage.load()) {
+            registerImpl(user.key, user.value.start, user.value.tasks)
         }
     }
 
     @Synchronized
-    fun save(storage: String) {
+    fun save() {
         log.info { "Saving state..." }
-        val state = mutableMapOf<UserId, CourseState<Int>>()
-        for (user in users) {
-            val firstActiveTask = user.value.tasks.indexOfFirst { it.cancel() }
-            state[user.key] = CourseState(user.value.start, firstActiveTask)
-        }
-        val stateStr = gson.toJson(state)
-        log.debug { "State for saving $stateStr" }
-        File(storage).bufferedWriter().use { it.write(stateStr) }
+        storage.save(users)
     }
 }
 

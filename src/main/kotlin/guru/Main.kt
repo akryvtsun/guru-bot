@@ -1,12 +1,13 @@
 package guru
 
+import guru.state.BotState
+import guru.state.StateStorage
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 // TODO externalize directory for storing course and storing state?
-private const val STORAGE = "course/state_dump.json"
 private val log = KotlinLogging.logger { }
 
 // TODO externalize all text messages sending to users
@@ -15,13 +16,16 @@ fun main() {
 
     val token = System.getenv("BOT_TOKEN")
 
-    val config = CourseConfig("course/config.json")
     val client = OkHttpTelegramClient(token)
-    val state = BotState(config, client)
+    val state = BotState(
+        CourseConfig("course/config.json"),
+        client,
+        StateStorage("course/state_dump.json")
+    )
 
-    state.load(STORAGE)
+    state.load()
     Runtime.getRuntime().addShutdownHook(Thread {
-        state.save(STORAGE)
+        state.save()
         // TODO cancel timer?
     })
 

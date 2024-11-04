@@ -1,5 +1,6 @@
 package guru
 
+import guru.state.UserId
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.telegram.telegrambots.meta.generics.TelegramClient
