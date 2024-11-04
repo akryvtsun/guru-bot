@@ -12,7 +12,7 @@ import kotlin.test.Test
 class MaterialTimerTaskTest {
 
     @Test
-    fun `should consume _start command`() {
+    fun `execute timer task`() {
         val tgClient = mockk<TelegramClient>()
 
         val t = MaterialTimerTask(
