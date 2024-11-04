@@ -23,6 +23,7 @@ class GuruBot(
             val text = update.message.text
             log.debug { "Received '$text' message from $user" }
 
+            // TODO move these messages to course config
             when (text) {
                 "/start" -> {
                     client.sendMessage(user, "\uD83C\uDF89 *Вітаю на курсі* \u203c")

@@ -22,7 +22,7 @@ class ItemDeserializer : JsonDeserializer<Item> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Item {
         val jsonObject = json.asJsonObject
         val clazz = when {
-            // TODO move recognition logic to items
+            // TODO move recognition logic to items' classes
             jsonObject.has("text") -> TextItem::class.java
             jsonObject.has("image") -> ImageItem::class.java
             jsonObject.has("video") -> VideoItem::class.java

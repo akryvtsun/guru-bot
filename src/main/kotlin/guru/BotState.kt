@@ -69,6 +69,7 @@ internal class BotState(
             }
         }
 
+        log.debug { "User $user course start is $courseStart and tasks: $tasks" }
         users[user] = CourseState(courseStart, tasks)
     }
 
@@ -122,6 +123,7 @@ internal class BotState(
             state[user.key] = CourseState(user.value.start, firstActiveTask)
         }
         val stateStr = gson.toJson(state)
+        log.debug { "State for saving $stateStr" }
         File(storage).bufferedWriter().use { it.write(stateStr) }
     }
 }

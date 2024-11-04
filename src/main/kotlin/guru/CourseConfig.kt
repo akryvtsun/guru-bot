@@ -1,6 +1,7 @@
 package guru
 
 import com.google.gson.GsonBuilder
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.File
 import java.time.LocalTime
 
@@ -22,7 +23,12 @@ internal class CourseConfig(configFile: String) {
     val course: List<Course.Period>
         get() = config.periods
 
+    companion object {
+        val log = KotlinLogging.logger { }
+    }
+
     init {
+        log.info { "Loading config from $configFile" }
         val jsonString = File(configFile).readText()
         val gson = GsonBuilder()
             .registerTypeAdapter(LocalTime::class.java, LocalTimeDeserializer())

@@ -1,5 +1,6 @@
 package guru
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException
 import org.telegram.telegrambots.meta.generics.TelegramClient
 import java.net.HttpURLConnection
@@ -11,6 +12,10 @@ class MaterialTimerTask(
     val client: TelegramClient,
     val blockAction: (UserId) -> Unit
 ) : TimerTask() {
+
+    companion object {
+        val log = KotlinLogging.logger { }
+    }
 
     override fun run() {
         try {
@@ -24,6 +29,7 @@ class MaterialTimerTask(
     }
 
     private fun processItems() {
+        log.debug { "Send material items: ${items}" }
         for (item in items) {
             item.send(user, client)
         }

@@ -5,6 +5,7 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
+// TODO externalize directory for storing course and storing state?
 private const val STORAGE = "course/state_dump.json"
 private val log = KotlinLogging.logger { }
 
@@ -21,7 +22,7 @@ fun main() {
     state.load(STORAGE)
     Runtime.getRuntime().addShutdownHook(Thread {
         state.save(STORAGE)
-        // TODO cancel timer
+        // TODO cancel timer?
     })
 
     val bot = GuruBot(state, client)
