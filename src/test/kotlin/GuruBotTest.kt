@@ -41,4 +41,36 @@ class GuruBotTest {
         verify { client.execute(any<SendMessage>()) }
         verify { registrar.register(chatId) }
     }
+
+    @Test
+    fun `should consume _stop command`() {
+        // given
+        val chatId = 12345L
+        val textStr = "/stop"
+
+        val chat = Chat.builder()
+            .type("private")
+            .id(chatId)
+            .build()
+        val message = Message.builder()
+            .chat(chat)
+            .text(textStr)
+            .build()
+        val update = Update().apply {
+            this.message = message
+        }
+
+        val registrar = mockk<Registrar>()
+        every { registrar.unregister(chatId) } just runs
+
+        val client = mockk<TelegramClient>()
+        every { client.execute(any<SendMessage>()) } returns null
+
+        // when
+        GuruBot(registrar, client).consume(update)
+
+        // than
+        verify { client.execute(any<SendMessage>()) }
+        verify { registrar.unregister(chatId) }
+    }
 }
