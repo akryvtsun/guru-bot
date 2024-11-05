@@ -13,7 +13,7 @@ class StateStorageTest {
     fun `load state`() {
         val storage = StateStorage("src/test/resources/state_dump.json")
 
-        val state = storage.load()
+        val state = storage.load(deleteAfterLoad = false)
 
         assertThat(state).isNotNull()
         assertThat(state.size).isEqualTo(1)

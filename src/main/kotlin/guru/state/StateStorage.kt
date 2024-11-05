@@ -20,14 +20,15 @@ class StateStorage(private val storage: String) {
         val log = KotlinLogging.logger { }
     }
 
-    fun load(): Map<UserId, CourseState<Int>> {
+    fun load(deleteAfterLoad: Boolean = true): Map<UserId, CourseState<Int>> {
         var state = emptyMap<UserId, CourseState<Int>>()
         val file = File(storage)
         if (file.exists()) {
             val stateStr = file.bufferedReader().readText()
             val type = object : TypeToken<HashMap<UserId, CourseState<Int>>>() {}.type
             state = gson.fromJson(stateStr, type)
-            file.delete()
+            if (deleteAfterLoad)
+                file.delete()
         }
         return state
     }
