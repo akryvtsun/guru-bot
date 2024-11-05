@@ -10,5 +10,6 @@ class CourseConfigTest {
         val config = CourseConfig("src/test/resources/config.json")
 
         assertThat(config).isNotNull
+        assertThat(config.course).isNotNull
     }
 }
