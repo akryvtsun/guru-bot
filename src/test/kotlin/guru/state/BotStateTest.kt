@@ -13,7 +13,10 @@ import java.time.LocalTime
 class BotStateTest {
 
     @Test
-    fun `register user`() {
+    fun `register and unregister users`() {
+        val firstUser = 11111L
+        val secondUser = 22222L
+
         val config = mockk<CourseConfig>()
         val period = Course.Period(listOf(Course.Period.Material(LocalTime.now(), emptyList())))
         every { config.course } returns listOf(period)
@@ -24,10 +27,14 @@ class BotStateTest {
         every { storage.save(capture(slot)) } just runs
 
         val state = BotState(config, tgClient, storage)
-        state.register(12345)
+        state.register(firstUser)
+        state.register(secondUser)
+        state.unregister(firstUser)
         state.save()
 
         assertThat(slot.isCaptured).isTrue
-        assertThat(slot.captured.size).isOne()
+        val users = slot.captured
+        assertThat(users.size).isOne()
+        assertThat(users.entries.iterator().next().key).isEqualTo(secondUser)
     }
 }
