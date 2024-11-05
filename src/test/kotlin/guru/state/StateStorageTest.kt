@@ -11,13 +11,12 @@ class StateStorageTest {
 
     @Test
     fun `load empty state`() {
-        val storage = StateStorage("test")
+        val storage = StateStorage("src/test/resources/state_dump.json")
 
         val state = storage.load()
 
-        assertThat(state)
-            .isNotNull()
-            .isEmpty()
+        assertThat(state).isNotNull()
+        assertThat(state.size).isEqualTo(1)
     }
 
     @Test
@@ -25,7 +24,7 @@ class StateStorageTest {
         var userId = 11111L
         val users = mapOf(userId to CourseState(LocalDateTime.now(), emptyList<MaterialTimerTask>()))
 
-        val storageName = "test"
+        val storageName = "src/test/resources/test_dump.json"
         val storage = StateStorage(storageName)
 
         storage.save(users)
