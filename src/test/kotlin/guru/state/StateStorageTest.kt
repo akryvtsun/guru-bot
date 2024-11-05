@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 class StateStorageTest {
 
     @Test
-    fun `load empty state`() {
+    fun `load state`() {
         val storage = StateStorage("src/test/resources/state_dump.json")
 
         val state = storage.load()
@@ -20,7 +20,7 @@ class StateStorageTest {
     }
 
     @Test
-    fun `save empty state`() {
+    fun `save state`() {
         var userId = 11111L
         val users = mapOf(userId to CourseState(LocalDateTime.now(), emptyList<MaterialTimerTask>()))
 
